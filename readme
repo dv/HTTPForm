@@ -1,0 +1,44 @@
+Crowdway.http Actionscript 3 Library
+------------------------------------
+
+This little library helps you create HTTP requests which a server would interpret as true HTML form submissions. It is possible to set the encoding for each field, please check out the source code for specifics.
+
+Put these files in subdirectories ./crowdway/http/ under the root folder of your project, so that the actionscript compiler will be able to reach them.
+
+Example code:
+
+	httpForm = new HTTPForm("http://www.google.com");
+	httpForm.addEventListener(flash.events.Event.COMPLETE, eventCompleteHandler);
+
+	httpForm.addField(MimeString.fromString("name", "David Verhasselt"));		// Add field named "name"
+	httpForm.addField(MimeString.fromString("email", "david@crowdway.com"));	// Add field named "email"
+	httpForm.addField(MimeFile.fromByteArray("avatar", "david_at_the_beach_07.jpg", filedata));	// Add filefield named "avatar"
+	httpForm.send();
+
+	function eventCompleteHandler(event:Event):void
+	{
+		var loader:URLLoader = URLLoader(event.target);
+		trace(loader.data);
+	}
+
+The code above emulates a form with 3 inputfields:
+
+	- an inputbox named "name" with value "David Verhasselt"
+	- an inputbox named "email" with value "david@crowdway.com"
+	- a fileinput named "avatar" in which the user selected a file named "david_at_the_beach_07.jpg"
+	  with contents the ByteArray filedata
+
+It is sent to http://www.google.com. The server at google.com will think it is receiving a form submission with an attached image. The result will be trace()d.
+
+2009 Addendum: The code above works perfectly with Flash 9. However, starting with Flash 10, Adobe has issued some really constrictive security policies which don't really increase security in my opinion. One of them, explained in [1], pertains to any networking call that contains a file upload. Practically, starting with Flash 10, you can send file uploads using httpForm or an alternative only when it is instigated by a user action. For example, only in an onClick eventhandler or a function called by that eventhandler will httpForm.send() work. If you haven't attached a MimeFile with a filename then this restriction doesn't apply.
+
+If you are willing to forgo the server recognizing the file as a fileupload, you can still send the form with the file added as a regular, raw binary inputfield by dismissing the filename:
+
+	httpForm.addField(MimeFile.fromByteArray("avatar", null, filedata));
+
+The server won't recognize it as a file anymore, but the POST-field named "avatar" will still contain the binary filedata.
+
+[1] http://www.adobe.com/devnet/flashplayer/articles/fplayer10_security_changes_print.html#head34
+
+(c) 2006-2009 David Verhasselt <david@crowdway.com>
+Licensed under the MIT license
