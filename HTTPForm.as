@@ -67,7 +67,7 @@ package crowdway.http
 		 * @param boundary The boundary to be used to split the message-parts
 		 * @return All the messages from fields compiled in 1 ByteArray
 		 */
-		private function compileBody(boundary:String):ByteArray
+		public function getBody(boundary:String):ByteArray
 		{
 			var body:ByteArray = new ByteArray();
 
@@ -132,6 +132,16 @@ package crowdway.http
 		}
 
 		/**
+		 * Returns the correct contentType to be set, including the boundary.
+		 *
+		 * @param boundary The boundary to be used. Must be consistent with getBody()
+		 */
+		public function getContentType(boundary:String):String
+		{
+			return "multipart/form-data; boundary=\"" + boundary + "\"";
+		}
+
+		/**
 		 * Adds a message-part (an input-field or file) to be sent to the destination to this HTTPForm
 		 *
 		 * @param field The field to be added
@@ -149,8 +159,8 @@ package crowdway.http
 			var boundary:String = generateBoundary(10);
 
 			this.request.method = URLRequestMethod.POST;
-			this.request.contentType = "multipart/form-data; boundary=\"" + boundary + "\"";
-			this.request.data = this.compileBody(boundary);
+			this.request.contentType = getContentType(boundary); 
+			this.request.data = getBody(boundary);
 			this.loader.load(request);
 		}
 
