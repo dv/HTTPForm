@@ -29,12 +29,14 @@ package crowdway.http
 	public class HTTPForm implements IEventDispatcher
 	{
 		private const crlf:String = "\r\n";
+		private const boundaryLength:Number = 10;
 
 		// Variables for net-connection
 		private var request:URLRequest;
 		private var loader:URLLoader;
 
 		// Variables for content
+		private var autoBoundary:String;
 		private var fields:Array;
 
 
@@ -67,9 +69,19 @@ package crowdway.http
 		 * @param boundary The boundary to be used to split the message-parts
 		 * @return All the messages from fields compiled in 1 ByteArray
 		 */
-		public function getBody(boundary:String):ByteArray
+		public function getBody(boundary:String = null):ByteArray
 		{
 			var body:ByteArray = new ByteArray();
+
+			if (!boundary)
+			{
+				if (!autoBoundary)
+				{
+					autoBoundary = generateBoundary(boundaryLength);
+				}
+
+				boundary = autoBoundary;
+			}
 
 			body.writeUTFBytes("--" + boundary + crlf);
 
@@ -136,8 +148,18 @@ package crowdway.http
 		 *
 		 * @param boundary The boundary to be used. Must be consistent with getBody()
 		 */
-		public function getContentType(boundary:String):String
+		public function getContentType(boundary:String = null):String
 		{
+			if (!boundary)
+			{
+				if (!autoBoundary)
+				{
+					autoBoundary = generateBoundary(boundaryLength);
+				}
+
+				boundary = autoBoundary;
+			}
+
 			return "multipart/form-data; boundary=\"" + boundary + "\"";
 		}
 
