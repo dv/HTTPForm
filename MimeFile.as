@@ -74,36 +74,11 @@ package crowdway.http
 			
 			result.name = name;
 			result.fileName = fileName;
-			result.contentType = contentType + crlf + "Content-Transfer-Encoding: binary";
+			result.contentType = contentType;
 			result.content = content;
 
 			return result;
 		}
-
-		/**
-		 * Factory Method: Creates a base64 encoded MimeFile with the supplied name, filename, base64 encoded content and optional content-type.
-		 *
-		 * @param name The name of the new MimeFile
-		 * @param fileName The filename of the new MimeFile
-		 * @param content The base64 encoded content of the new MimeFile
-		 * @param contentType The optional content-type of the content. Defaults to "application/octet-stream"
-		 *
-		 * @return A new MimeFile based on the supplied parameters
-		 */
-		static public function fromBase64(name:String,fileName:String,content:String,contentType:String = "application/octet-stream"):MimeFile
-		{
-			var result:MimeFile = new MimeFile();
-
-			result.name = name;
-			result.fileName = fileName;
-			result.contentType = contentType + crlf + "Content-Transfer-Encoding: base64";
-			result.content = new ByteArray();
-			result.content.writeMultiByte(content,"us-ascii");
-
-			return result;
-		}
-		 
-		
 
 		public function getName():String
 		{
