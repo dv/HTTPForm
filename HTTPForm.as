@@ -83,17 +83,16 @@ package crowdway.http
 				boundary = autoBoundary;
 			}
 
-			body.writeUTFBytes("--" + boundary + crlf);
-
 			for each (var field:MimePart in this.fields)
 			{
+				body.writeUTFBytes("--" + boundary + crlf);
 
 				// Add the head of the part
-				body.writeUTFBytes("content-disposition: form-data; name=\"" + field.getName() + "\";");
+				body.writeUTFBytes("content-disposition: form-data; name=\"" + field.getName() + "\"");
 				
 				if (field.getFilename() != null)
 				{
-					body.writeUTFBytes(" filename=\"" + field.getFilename() + "\";");
+					body.writeUTFBytes("; filename=\"" + field.getFilename() + "\"");
 				}
 
 				body.writeUTFBytes(crlf);
@@ -107,8 +106,10 @@ package crowdway.http
 
 				// Add the body and end of the part
 				body.writeBytes(field.getBody());
-				body.writeUTFBytes(crlf + "--" + boundary + crlf);
+				body.writeUTFBytes(crlf);
 			}
+
+			body.writeUTFBytes("--" + boundary + "--" + crlf);
 		
 			return body;
 		}

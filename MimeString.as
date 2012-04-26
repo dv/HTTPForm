@@ -129,7 +129,7 @@ package crowdway.http
 
 			else
 			{
-				result.writeUTFBytes(this.content + crlf);
+				result.writeUTFBytes(this.content);
 			}
 
 			return result;
