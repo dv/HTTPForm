@@ -40,5 +40,5 @@ The server won't recognize it as a file anymore, but the POST-field named "avata
 
 [1] http://www.adobe.com/devnet/flashplayer/articles/fplayer10_security_changes_print.html#head34
 
-(c) 2006-2009 David Verhasselt <david@crowdway.com>
+(c) 2006-2012 David Verhasselt <david@crowdway.com>
 Licensed under the MIT license
